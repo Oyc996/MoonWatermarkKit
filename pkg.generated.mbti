@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "placeholder/moonwatermarkkit"
+package "Oyc996/moonwatermarkkit"
 
 import {
   "moonbitlang/core/debug",

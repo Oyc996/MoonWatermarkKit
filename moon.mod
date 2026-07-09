@@ -1,10 +1,10 @@
-name = "placeholder/moonwatermarkkit"
+name = "Oyc996/moonwatermarkkit"
 
 version = "0.1.0"
 
 readme = "README.mbt.md"
 
-repository = "https://github.com/placeholder/MoonWatermarkKit"
+repository = "https://github.com/Oyc996/MoonWatermarkKit"
 
 license = "Apache-2.0"
 

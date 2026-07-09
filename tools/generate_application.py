@@ -52,10 +52,10 @@ def table(rows):
 story = [p("MoonWatermarkKit 项目申报书", title)]
 story.append(table([
     ("项目名称", "MoonWatermarkKit：面向 MoonBit 的事件时间水位线、迟到事件与窗口归属基础库"),
-    ("参赛者", "待填写"),
-    ("联系方式", "待填写"),
-    ("GitHub 仓库", "待填写"),
-    ("GitLink 仓库", "待填写"),
+    ("参赛者", "欧阳灿"),
+    ("联系方式", "19167509286"),
+    ("GitHub 仓库", "https://github.com/Oyc996/MoonWatermarkKit"),
+    ("GitLink 仓库", "https://www.gitlink.org.cn/Oyc996/MoonWatermarkKit"),
     ("项目方向", "MoonBit 数据工程基础库 / 流式事件时间处理"),
     ("是否移植项目", "否，原创 MoonBit 基础库"),
 ]))
@@ -78,4 +78,3 @@ for name, text in sections:
 doc = SimpleDocTemplate(str(PDF_PATH), pagesize=A4, rightMargin=18 * mm, leftMargin=18 * mm, topMargin=16 * mm, bottomMargin=16 * mm)
 doc.build(story)
 print(PDF_PATH)
-

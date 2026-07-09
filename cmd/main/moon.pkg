@@ -1,5 +1,5 @@
 import {
-  "placeholder/moonwatermarkkit" @wm,
+  "Oyc996/moonwatermarkkit" @wm,
 }
 
 options(
