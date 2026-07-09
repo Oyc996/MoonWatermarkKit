@@ -1,0 +1,13 @@
+name = "placeholder/moonwatermarkkit"
+
+version = "0.1.0"
+
+readme = "README.mbt.md"
+
+repository = "https://github.com/placeholder/MoonWatermarkKit"
+
+license = "Apache-2.0"
+
+keywords = [ "watermark", "event-time", "window", "lateness", "streaming" ]
+
+description = "Event-time watermark, lateness, and window assignment primitives for MoonBit."
