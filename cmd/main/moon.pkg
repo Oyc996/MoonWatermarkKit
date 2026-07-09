@@ -1,0 +1,7 @@
+import {
+  "placeholder/moonwatermarkkit" @wm,
+}
+
+options(
+  "is-main": true,
+)

@@ -1,0 +1,111 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "placeholder/moonwatermarkkit"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn assign_event(WatermarkState, WindowSpec, StreamEvent) -> EventAssignment
+
+pub fn assign_windows(WindowSpec, Int) -> Array[TimeWindow]
+
+pub fn audit_assignments(Array[EventAssignment]) -> StreamAudit
+
+pub fn default_policy() -> WatermarkPolicy
+
+pub fn five_minute_sliding_window() -> WindowSpec
+
+pub fn max_int(Int, Int) -> Int
+
+pub fn minute_window() -> WindowSpec
+
+// Errors
+
+// Types and methods
+pub(all) struct EventAssignment {
+  event : StreamEvent
+  status : EventStatus
+  watermark_ms : Int
+  windows : Array[TimeWindow]
+} derive(Eq, @debug.Debug)
+pub fn EventAssignment::accepted(Self) -> Bool
+pub fn EventAssignment::to_json(Self) -> String
+
+pub(all) enum EventStatus {
+  OnTime
+  Late
+  TooLate
+} derive(Eq, @debug.Debug)
+pub fn EventStatus::name(Self) -> String
+
+pub(all) struct StreamAudit {
+  total : Int
+  on_time : Int
+  late : Int
+  too_late : Int
+  accepted : Int
+} derive(Eq, @debug.Debug)
+pub fn StreamAudit::healthy(Self) -> Bool
+pub fn StreamAudit::to_json(Self) -> String
+
+pub(all) struct StreamEvent {
+  key : String
+  event_time_ms : Int
+  arrival_time_ms : Int
+  value : Int
+} derive(Eq, @debug.Debug)
+pub fn StreamEvent::new(String, Int, Int, Int) -> Self
+
+pub(all) struct TimeWindow {
+  start_ms : Int
+  end_ms : Int
+} derive(Eq, @debug.Debug)
+pub fn TimeWindow::contains(Self, Int) -> Bool
+pub fn TimeWindow::new(Int, Int) -> Self
+pub fn TimeWindow::to_json(Self) -> String
+
+pub(all) struct WatermarkPolicy {
+  max_out_of_order_ms : Int
+  allowed_lateness_ms : Int
+  idle_timeout_ms : Int
+} derive(Eq, @debug.Debug)
+pub fn WatermarkPolicy::new(Int, Int, Int) -> Self
+
+pub(all) struct WatermarkState {
+  policy : WatermarkPolicy
+  max_event_time_ms : Int
+  current_watermark_ms : Int
+  last_arrival_ms : Int
+  initialized : Bool
+} derive(Eq, @debug.Debug)
+pub fn WatermarkState::classify(Self, StreamEvent) -> EventStatus
+pub fn WatermarkState::deadline_for(Self, Int) -> Int
+pub fn WatermarkState::mark_idle(Self, Int) -> Bool
+pub fn WatermarkState::new(WatermarkPolicy) -> Self
+pub fn WatermarkState::observe(Self, StreamEvent) -> Self
+
+pub(all) struct WindowAggregate {
+  window : TimeWindow
+  key : String
+  count : Int
+  sum : Int
+  late : Int
+  dropped : Int
+} derive(Eq, @debug.Debug)
+pub fn WindowAggregate::add(Self, EventAssignment) -> Self
+pub fn WindowAggregate::avg_x100(Self) -> Int
+pub fn WindowAggregate::new(TimeWindow, String) -> Self
+pub fn WindowAggregate::to_json(Self) -> String
+
+pub(all) struct WindowSpec {
+  size_ms : Int
+  slide_ms : Int
+} derive(Eq, @debug.Debug)
+pub fn WindowSpec::sliding(Int, Int) -> Self
+pub fn WindowSpec::tumbling(Int) -> Self
+
+// Type aliases
+
+// Traits
+
