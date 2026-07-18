@@ -39,6 +39,12 @@ pub(all) enum EventStatus {
 } derive(Eq, @debug.Debug)
 pub fn EventStatus::name(Self) -> String
 
+pub(all) struct PartitionWatermark {
+  partition : String
+  state : WatermarkState
+  idle : Bool
+} derive(Eq, @debug.Debug)
+
 pub(all) struct StreamAudit {
   total : Int
   on_time : Int
@@ -62,8 +68,19 @@ pub(all) struct TimeWindow {
   end_ms : Int
 } derive(Eq, @debug.Debug)
 pub fn TimeWindow::contains(Self, Int) -> Bool
+pub fn TimeWindow::is_finalized(Self, Int, Int) -> Bool
 pub fn TimeWindow::new(Int, Int) -> Self
 pub fn TimeWindow::to_json(Self) -> String
+
+pub(all) struct WatermarkCoordinator {
+  policy : WatermarkPolicy
+  partitions : Array[PartitionWatermark]
+} derive(Eq, @debug.Debug)
+pub fn WatermarkCoordinator::active_partition_count(Self) -> Int
+pub fn WatermarkCoordinator::global_watermark(Self) -> Int?
+pub fn WatermarkCoordinator::new(WatermarkPolicy) -> Self
+pub fn WatermarkCoordinator::observe(Self, String, StreamEvent) -> Self
+pub fn WatermarkCoordinator::refresh_idle(Self, Int) -> Self
 
 pub(all) struct WatermarkPolicy {
   max_out_of_order_ms : Int
@@ -102,6 +119,7 @@ pub(all) struct WindowSpec {
   size_ms : Int
   slide_ms : Int
 } derive(Eq, @debug.Debug)
+pub fn WindowSpec::max_windows_per_event(Self) -> Int
 pub fn WindowSpec::sliding(Int, Int) -> Self
 pub fn WindowSpec::tumbling(Int) -> Self
 

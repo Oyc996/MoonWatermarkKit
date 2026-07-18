@@ -46,6 +46,42 @@ test "sliding window assigns multiple windows" {
 }
 
 ///|
+test "window finalization includes allowed lateness boundary" {
+  let window = TimeWindow::new(60, 120)
+  assert_false(window.is_finalized(139, 20))
+  assert_true(window.is_finalized(140, 20))
+}
+
+///|
+test "window spec reports bounded overlap" {
+  assert_eq(WindowSpec::sliding(121, 60).max_windows_per_event(), 3)
+  assert_eq(WindowSpec::tumbling(60).max_windows_per_event(), 1)
+}
+
+///|
+test "coordinator uses minimum active partition watermark" {
+  let policy = WatermarkPolicy::new(10, 20, 100)
+  let coordinator = WatermarkCoordinator::new(policy)
+    .observe("left", StreamEvent::new("a", 120, 1, 1))
+    .observe("right", StreamEvent::new("b", 90, 2, 1))
+  assert_eq(coordinator.global_watermark(), Some(80))
+  assert_eq(coordinator.active_partition_count(), 2)
+}
+
+///|
+test "idle partition no longer holds global watermark" {
+  let policy = WatermarkPolicy::new(10, 20, 100)
+  let coordinator = WatermarkCoordinator::new(policy)
+    .observe("left", StreamEvent::new("a", 200, 1, 1))
+    .observe("right", StreamEvent::new("b", 100, 1, 1))
+    .refresh_idle(102)
+  assert_eq(coordinator.global_watermark(), None)
+  let active = coordinator.observe("left", StreamEvent::new("a", 220, 103, 1))
+  assert_eq(active.global_watermark(), Some(210))
+  assert_eq(active.active_partition_count(), 1)
+}
+
+///|
 test "assignment rejects too late events" {
   let state = WatermarkState::new(WatermarkPolicy::new(10, 20, 100)).observe(
     StreamEvent::new("a", 100, 1, 1),
