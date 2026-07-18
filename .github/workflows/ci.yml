@@ -42,21 +42,29 @@ jobs:
           moon update
 
       - name: Format check
+        shell: pwsh
         run: |
-          if moon fmt --help | grep -q -- '--deny-warn'; then
+          $fmtHelp = moon fmt --help | Out-String
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ($fmtHelp -match '--deny-warn') {
             moon fmt --deny-warn
-          else
+          } else {
             moon fmt --check
-          fi
+          }
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: API metadata check
+        shell: pwsh
         run: |
-          if moon info --help | grep -q -- '--deny-warn'; then
+          $infoHelp = moon info --help | Out-String
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if ($infoHelp -match '--deny-warn') {
             moon info --deny-warn
-          else
+          } else {
             moon info
             git diff --exit-code -- '*.mbti'
-          fi
+          }
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Moon check
         run: moon check --deny-warn --target all
